@@ -2,7 +2,8 @@ from pyrogram import Filters, InlineKeyboardMarkup, InlineKeyboardButton, Client
 from pyrogram.errors import *
 import time
 import logging
-from antiflood import BANNED_USERS
+from ..config import BANNED_USERS
+
 
 def query_filter(data):
     return Filters.create(
@@ -10,7 +11,7 @@ def query_filter(data):
         data=data)
 
 
-@Client.on_callback_query(query_filter("config_second_step") & ~BANNED_USERS)
+@Client.on_callback_query(query_filter("config_second_step"))
 def on_config_step_button_press(_, query):
     user = query.from_user
     user_id = user.id
@@ -31,7 +32,7 @@ def on_config_step_button_press(_, query):
         time.sleep(fw.x)
 
 
-@Client.on_callback_query(query_filter("config_ready") & ~BANNED_USERS)
+@Client.on_callback_query(query_filter("config_ready"))
 def on_config_ready_button_press(_, query):
     user = query.from_user
     user_id = user.id
@@ -53,7 +54,7 @@ def on_config_ready_button_press(_, query):
         time.sleep(fw.x)
 
 
-@Client.on_message(Filters.command("config") & Filters.private & ~BANNED_USERS)
+@Client.on_message(Filters.command("config") & Filters.private & ~BANNED_USERS & ~Filters.forwarded)
 def on_config(client, message):
     if message.from_user.first_name:
         name = message.from_user.first_name
@@ -78,7 +79,7 @@ def on_channel_forwarded(client, message):
         name = message.from_user.username
     else:
         name = "Anonimo"
-    if not forward.type == "channel":
+    if not forward:
         try:
             client.send_message(message.chat.id, "Sembra che il messaggio che hai inoltrato non provenga da un canale, riprova!")
         except FloodWait as fw:

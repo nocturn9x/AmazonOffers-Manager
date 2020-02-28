@@ -1,6 +1,7 @@
-from config import API_HASH, API_ID, WORKERS_NUM, SESSION_NAME, BOT_TOKEN, PLUGINS_ROOT, LOGGING_CONFIG
-from plugins.private import *
+from AmazonBot.config import API_HASH, API_ID, WORKERS_NUM, SESSION_NAME, BOT_TOKEN, PLUGINS_ROOT, LOGGING_CONFIG
 import logging
+from pyrogram import Client
+
 
 logging.basicConfig(datefmt=LOGGING_CONFIG[0], level=LOGGING_CONFIG[2], format=LOGGING_CONFIG[1])
 

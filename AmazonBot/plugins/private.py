@@ -2,6 +2,7 @@ from pyrogram import Filters, InlineKeyboardMarkup, InlineKeyboardButton, Client
 from pyrogram.errors import *
 import time
 import logging
+from ..config import BANNED_USERS
 
 
 def query_filter(data):
@@ -50,7 +51,7 @@ def on_back_button_press(_, query):
         time.sleep(fw.x)
 
 
-@Client.on_message(Filters.command("start") & Filters.private)
+@Client.on_message(Filters.command("start") & Filters.private & ~Filters.forwarded & ~BANNED_USERS)
 def on_start(client, message):
     msg = message
     if message.from_user.first_name:
