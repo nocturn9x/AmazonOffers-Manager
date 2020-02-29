@@ -132,5 +132,7 @@ dmypy.json
 *.session
 *.session-journal
 
-# AmazonOffers config
+# AmazonOffers config and DB
 config.py
+users.db
+channels.db

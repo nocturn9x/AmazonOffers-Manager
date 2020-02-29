@@ -1,7 +1,8 @@
-from AmazonBot.config import API_HASH, API_ID, WORKERS_NUM, SESSION_NAME, BOT_TOKEN, PLUGINS_ROOT, LOGGING_CONFIG
+from AmazonBot.config import API_HASH, API_ID, WORKERS_NUM, SESSION_NAME, BOT_TOKEN, PLUGINS_ROOT, LOGGING_CONFIG, DB_PATH
 import logging
 from pyrogram import Client
-
+from AmazonBot.database import dbcreator
+import AmazonBot.config
 
 logging.basicConfig(datefmt=LOGGING_CONFIG[0], level=LOGGING_CONFIG[2], format=LOGGING_CONFIG[1])
 
@@ -17,4 +18,6 @@ except Exception as error:
     exit(error)
 
 if __name__ == "__main__":
+    dbcreator.create_database(DB_PATH)
     BOT.start()
+
