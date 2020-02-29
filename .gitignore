@@ -131,3 +131,6 @@ dmypy.json
 # Pyrogram Session files
 *.session
 *.session-journal
+
+# AmazonOffers config
+config.py
