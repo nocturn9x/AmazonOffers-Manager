@@ -23,6 +23,8 @@ def query_regex(data):
         data=data)
 
 def flt_schedule(flt, message):
+    if not message.from_user:
+        return False
     if not DOING[message.from_user.id][0]:
         return False
     else:
@@ -144,9 +146,12 @@ def parse_date(client, message):
         name = message.from_user.username
     else:
         name = "Anonimo"
-    for key, (channel, action, date) in DOING.copy().items():
-        if time.time() - date >= 120:
-            del DOING[key]
+    try:
+        for key, (channel, action, date) in DOING.copy().items():
+            if time.time() - date >= 120:
+                del DOING[key]
+    except (ValueError, TypeError):
+        pass
     date = dateparser.parse(message.text, languages=['it'], region='IT')
     if not date and DOING[message.from_user.id]:
         try:

@@ -136,3 +136,4 @@ dmypy.json
 config.py
 users.db
 channels.db
+log
