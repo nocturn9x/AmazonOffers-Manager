@@ -1,3 +1,4 @@
 pyrogram>=0.16.0
 tgcrypto==1.2.0
 requests
+dateparser
