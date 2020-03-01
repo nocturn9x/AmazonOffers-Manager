@@ -31,8 +31,8 @@ def send_post(client, choices, channel, scheduled, amzn_code):
             message += "🌏 __Nuova Offerta__\n\n"
         message += f"✔️ **{name}**"
         if choices['text'] == "✅":
-            message += f"\n\n◢◤◢◤◢◤◢◤◢◤◢◤◢◤\n💳 ➠ ❌ ~~{old_price} {currency}~~ in offerta a `{new_price} {currency}` ✅\n\n🤑 Risparmio del {percentage} 🤑"
-        message += f"\n\n🌐 <a href='{real_link}'>Link prodotto</a>\n◢◤◢◤◢◤◢◤◢◤◢◤◢◤"
+            message += f"\n\n◢◤◢◤◢◤◢◤◢◤◢◤◢◤\n\n💳 ➠ ❌ ~~{old_price} {currency}~~ in offerta a `{new_price} {currency}` ✅\n\n🤑 Risparmio del {percentage} 🤑"
+        message += f"\n\n🌐 <a href='{real_link}'>Link prodotto</a>\n\n◢◤◢◤◢◤◢◤◢◤◢◤◢◤"
         try:
             client.send_message(channel, message, reply_markup=buttons)
         except RPCError as generic_error:
