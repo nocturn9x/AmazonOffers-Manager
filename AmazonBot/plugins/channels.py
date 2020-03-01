@@ -12,7 +12,7 @@ from collections import defaultdict
 from ..post_manager import send_post
 
 
-DOING = defaultdict(lambda: ([None, None, None])
+DOING = defaultdict(lambda: ([None, None, None]))
 choices = defaultdict(lambda: defaultdict(list))
 IDS = defaultdict(lambda: defaultdict(int))
 
