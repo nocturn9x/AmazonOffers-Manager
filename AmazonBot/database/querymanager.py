@@ -32,11 +32,11 @@ def retrieve_channels(user_id):
     DB = sqlite3.connect(DB_PATH)
     cursor = DB.cursor()
     try:
-        query = cursor.execute("SELECT channel, channel_name, admins, subscription from channels")
+        query = cursor.execute("SELECT channel, channel_name, admins, subscription, amzn_code from channels")
     except sqlite3.Error as err:
         logging.error(f"Error while retrieving! {err}")
     else:
-        for channel_id, name, json_data, sub in query.fetchall():
+        for channel_id, name, json_data, sub, code in query.fetchall():
             if user_id in json.loads(json_data)["admins"]:
-                channels.append((channel_id, name, sub))
+                channels.append((channel_id, name, sub, code))
     return channels

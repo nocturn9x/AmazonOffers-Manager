@@ -2,11 +2,12 @@ from pyrogram import Filters, InlineKeyboardMarkup, InlineKeyboardButton, Client
 import time
 import logging
 from collections import defaultdict
-from ..config import BANNED_USERS, MAX_MESS_THRESHOLD, BAN_TIME
+from ..config import MAX_MESS_THRESHOLD, BAN_TIME
 import time
 
 
 messages = defaultdict(list)
+BANNED_USERS = Filters.chat()
 
 
 @Client.on_message(Filters.private, group=-1)

@@ -2,8 +2,7 @@ from pyrogram import Filters, InlineKeyboardMarkup, InlineKeyboardButton, Client
 from pyrogram.errors import *
 import time
 import logging
-from ..config import BANNED_USERS
-
+from .antiflood import BANNED_USERS
 
 def query_filter(data):
     return Filters.create(

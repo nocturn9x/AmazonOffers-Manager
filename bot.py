@@ -3,6 +3,9 @@ import logging
 from pyrogram import Client
 from AmazonBot.database import dbcreator
 import AmazonBot.config
+from AmazonBot.scheduler import scheduler_thread as scheduler
+from threading import Thread
+
 
 logging.basicConfig(datefmt=LOGGING_CONFIG[0], level=LOGGING_CONFIG[2], format=LOGGING_CONFIG[1])
 
@@ -19,5 +22,6 @@ except Exception as error:
 
 if __name__ == "__main__":
     dbcreator.create_database(DB_PATH)
+    scheduler_thread = Thread(target=scheduler, args=tuple())
     BOT.start()
-
+    scheduler_thread.start()

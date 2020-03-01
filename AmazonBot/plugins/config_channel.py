@@ -2,7 +2,7 @@ from pyrogram import Filters, InlineKeyboardMarkup, InlineKeyboardButton, Client
 from pyrogram.errors import *
 import time
 import logging
-from ..config import BANNED_USERS
+from .antiflood import BANNED_USERS
 from ..database.querymanager import register_channel
 from collections import defaultdict
 

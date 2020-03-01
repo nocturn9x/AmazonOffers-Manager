@@ -1,9 +1,10 @@
 # Made by IsGiambyy aka Nocturn9x - All rights reserved (C) 2020
+
 import requests
 import json
 import logging
 from collections import deque
-from AmazonBot.config import API_SEARCH_URL, HEADERS, API_OFFERS_URL
+from .config import API_SEARCH_URL, API_OFFERS_URL, HEADERS
 
 
 def search_products(which: str):
@@ -35,8 +36,8 @@ def search_products(which: str):
     return offers
 
 
-def scrape_offers():
-    """Scrapes the latest offers from the API and returns them"""
+def scrape_deals():
+    """Scrapes the latest deals from the API and returns them"""
 
     logging.debug("Contacting API for offers...")
     request = requests.get(API_OFFERS_URL, headers=HEADERS)

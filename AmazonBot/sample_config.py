@@ -1,4 +1,5 @@
-from pyrogram import Filters
+import os
+
 
 # HTTP Headers for the scraper module
 HEADERS = {
@@ -9,26 +10,25 @@ API_OFFERS_URL = "https://nocturn9x.space/amazon/deals.php"
 API_SEARCH_URL = "https://nocturn9x.space/amazon/search.php?name={which}"
 
 # Logging config: (format, datefmt)
-LOGGING_CONFIG = ("%d/%m/%Y %H:%M:%S %p", "[%(levelname)s] [%(asctime)s)]: %(message)s", 20)
+LOGGING_CONFIG = ("%d/%m/%Y %H:%M:%S %p", "[%(levelname)s] [%(asctime)s]: %(message)s", 20)
 
-API_ID = # REPLACE WITH YOUR API ID (INTEGER)
-API_HASH = "API HASH HERE"
-WORKERS_NUM = 10  # Number of worker threads of the bot
+API_ID = 123456
+API_HASH = "123456789"
+WORKERS_NUM = 10
 SESSION_NAME = "AmazonOffers"
-BOT_TOKEN = "BOT TOKEN HERE"
+BOT_TOKEN = "TOKEN"A
 PLUGINS_ROOT = "AmazonBot/plugins"
-MAX_MESS_THRESHOLD = 7  # Max. number of messages to calculate flood rate
-BAN_TIME = 60   # The min. duration of the flood ban, in seconds
-OWNERS_LIST = []  # List of users that are super-users and can add other admins in the database
+MAX_MESS_THRESHOLD = 7
+BAN_TIME = 60
 
 # DANGER ZONE - DO NOT CHANGE ANYTHING BELOW THIS LINE - SHARED VARIABLES
 
-DB_PATH = ""
-BANNED_USERS = Filters.chat()
-CREATE_QUERY = """CREATE TABLE channels(channel INTEGER NOT NULL PRIMARY KEY,
+DB_PATH = os.path.join(os.getcwd(), "users.db")
+CREATE_QUERY = """CREATE TABLE channels (channel INTEGER NOT NULL PRIMARY KEY,
+                                        channel_name TEXT NOT NULL,
                                         admins TEXT NULL,
                                         subscription TEXT NULL DEFAULT 'free',
-                                        amzn_code TEXT NOT NULL);
-                  CREATE TABLE admins(user_id INTEGER NOT NULL PRIMARY KEY,
-                                      super_user INTEGER NOT NULL DEFAULT 0);"""
+                                        amzn_code TEXT NOT NULL);"""
 TEST_QUERY = """SELECT * FROM channels WHERE channel != 1;"""
+
+
