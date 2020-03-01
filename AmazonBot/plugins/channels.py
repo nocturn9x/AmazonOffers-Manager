@@ -12,7 +12,7 @@ from collections import defaultdict
 from ..post_manager import send_post
 
 
-DOING = defaultdict(lambda: ([None, None, None]))
+DOING = defaultdict(lambda: ([None, None, None])
 choices = defaultdict(lambda: defaultdict(list))
 IDS = defaultdict(lambda: defaultdict(int))
 
@@ -22,7 +22,13 @@ def query_regex(data):
         lambda flt, query: re.match(data, query.data),
         data=data)
 
-Filters.UserScheduling = Filters.create(lambda flt, message: DOING[message.from_user.id][1] == "SCHEDULE")
+def flt_schedule(flt, message):
+    if not DOING[message.from_user.id][0]:
+        return False
+    else:
+        return DOING[message.from_user.id][1] == "SCHEDULE"
+
+Filters.UserScheduling = Filters.create(flt_schedule)
 
 
 @Client.on_callback_query(query_regex("\-\d+\_.+\_\w+"))
