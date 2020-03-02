@@ -26,7 +26,7 @@ def flt_schedule(flt, message):
     if not DOING[message.from_user.id][0]:
         return False
     else:
-        return DOING[message.from_user.id][1] == "SCHEDULE" and isinstance(DOING[message.from_user.id][-1], int)
+        return DOING[message.from_user.id][1] == "SCHEDULE"
 
 
 Filters.UserScheduling = Filters.create(flt_schedule)
@@ -42,7 +42,7 @@ def make_post(_, query):
     else:
         name = "Anonimo"
     channel_id, channel_name, sub = query.data.split("_")
-    DOING[query.from_user.id] = [int(channel_id), None]
+    DOING[query.from_user.id] = [int(channel_id), 0, 0]
     pro = 'Sì' if sub == 'pro' else 'No'
     pro = 'Sì'
     channel_name = b64dec(channel_name.encode("utf-8")).decode()
@@ -111,6 +111,7 @@ def schedule_message(client, query):
         name = message.from_user.username
     else:
         name = "Anonimo"
+    DOING[query.from_user.id].pop()
     DOING[query.from_user.id].pop()
     buttons = InlineKeyboardMarkup([[InlineKeyboardButton("❌ Annulla", callback_data='back_start')]])
     if choices[query.from_user.id]["schedule"] == "✅":
