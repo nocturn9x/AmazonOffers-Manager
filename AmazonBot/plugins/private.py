@@ -4,6 +4,7 @@ import time
 import logging
 from .antiflood import BANNED_USERS
 
+
 def query_filter(data):
     return Filters.create(
         lambda flt, query: flt.data == query.data,
@@ -52,20 +53,36 @@ def on_back_button_press(_, query):
 
 @Client.on_message(Filters.command("start") & Filters.private & ~Filters.forwarded & ~BANNED_USERS)
 def on_start(client, message):
-    msg = message
     if message.from_user.first_name:
         name = message.from_user.first_name
     elif message.from_user.username:
         name = message.from_user.username
     else:
         name = "Anonimo"
-    user_id = msg.from_user.id
+    user_id = message.from_user.id
     buttons = InlineKeyboardMarkup([[InlineKeyboardButton(url="telegram.me/isgiambyy", text="💻 Sviluppatore"), InlineKeyboardButton(text="❓ Cos'è?", callback_data=f"help")]])
     try:
-        client.send_message(msg.chat.id, f"Ciao [{name}](tg://user?id={user_id})! Sono un bot creato per gestire canali di offerte Amazon, con tante funzioni interessanti!\n\nPremi i bottoni qui sotto per saperne di più, o invia /config se sei pronto ad iniziare", reply_markup=buttons)
+        client.send_message(message.chat.id, f"Ciao [{name}](tg://user?id={user_id})! Sono un bot creato per gestire canali di offerte Amazon, con tante funzioni interessanti!\n\nPremi i bottoni qui sotto per saperne di più, o invia /config se sei pronto ad iniziare", reply_markup=buttons)
     except FloodWait as fw:
         logging.error(
             f"Error in chat with {name} [{message.from_user.id}] -> FloodWait! Sleeping for {fw.x} seconds...")
         time.sleep(fw.x)
 
+
+@Client.on_message(Filters.command("gopremium" & Filters.private & ~BANNED_USERS)
+def go_premium(client, message):
+    if message.from_user.first_name:
+        name = message.from_user.first_name
+    elif message.from_user.username:
+        name = message.from_user.username
+    else:
+        name = "Anonimo"
+    user_id = message.from_user.id
+    buttons = InlineKeyboardMarkup([[InlineKeyboardButton(url="telegram.me/AmazonOffersSupport", text="🔥 Contattaci")]])
+    try:
+        client.send_message(message.chat.id, f"🌈 Per diventare premium contatta l'assistenza tramite il bottone qui sotto\n\nUna volta premium potrai:\n- Programmare un numero illimitato di post\n- Creare bottoni personalizzati (Coming Soon)\n- Modificare il testo dei post (Coming Soon)")
+    except FloodWait as fw:
+        logging.error(
+            f"Error in chat with {name} [{message.from_user.id}] -> FloodWait! Sleeping {fw.x} seconds...")
+        time.sleep(fw.x)
 

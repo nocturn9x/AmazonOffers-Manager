@@ -147,22 +147,28 @@ def get_amazon_code(client, message):
     if REG_HALF[message.chat.id]:
         code = message.text
         try:
-            client.send_message(message.chat.id, "✅ Procedura completata\nPotresti dover attendere un paio di minuti perché il nuovo canale appaia con /post")
-        except FloodWait as fw:
-            logging.error(
-                    f"Error in chat with {name} [{message.from_user.id}] -> FloodWait! Sleeping for {fw.x} seconds...")
-            del REG_HALF[message.chat.id]
-            time.sleep(fw.x)
+            admins = client.get_chat_members(channel, filter='administrators')
+        except (exceptions.bad_request_400.UserNotParticipant, exceptions.bad_request_400.ChannelPrivate):
+            logging.error(f"Error with channel {channel}, could not fetch admins")
         else:
-            channel, _, name = REG_HALF.pop(message.chat.id)
-            try:
-                admins = client.get_chat_members(channel, filter='administrators')
-            except (exceptions.bad_request_400.UserNotParticipant, exceptions.bad_request_400.ChannelPrivate):
-                logging.error(f"Error with channel {channel}, could not fetch admins")
-            else:
-                ids = [admin.user.id for admin in admins]
-                del admins
+            ids = [admin.user.id for admin in admins]
+            if message.from_user.id in ids:
                 register_channel(channel, ids, "free", code, name)
+                try:
+                    client.send_message(message.chat.id, "✅ Procedura completata\nPotresti dover attendere un paio di minuti perché il nuovo canale appaia con /post")
+                except FloodWait as fw:
+                    logging.error(
+                    f"Error in chat with {name} [{message.from_user.id}] -> FloodWait! Sleeping for {fw.x} seconds...")
+                    del REG_HALF[message.chat.id]
+                    time.sleep(fw.x)
+            else:
+                try:
+                    client.send_message(message.chat.id, "❌ Errore: Non sei amministratore nel canale selezionato! Non posso proseguire")
+                except FloodWait as fw:
+                    logging.error(
+                    f"Error in chat with {name} [{message.from_user.id}] -> FloodWait! Sleeping for {fw.x} seconds...")
+                    del REG_HALF[message.chat.id]
+                    time.sleep(fw.x)
     else:
         try:
             client.send_message(message.chat.id, "❌ Errore: Non hai avviato la procedura di configurazione in modo corretto o la tua sessione é scaduta")

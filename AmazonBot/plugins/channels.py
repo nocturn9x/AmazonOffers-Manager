@@ -26,8 +26,8 @@ def flt_schedule(flt, message):
     if not DOING[message.from_user.id][0]:
         return False
     else:
-        return DOING[message.from_user.id][1] == "SCHEDULE"
-
+        if len(DOING) >= 3
+            return DOING[message.from_user.id][1] == "SCHEDULE"
 
 Filters.UserScheduling = Filters.create(flt_schedule)
 
