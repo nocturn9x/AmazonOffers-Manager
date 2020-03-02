@@ -147,7 +147,7 @@ def get_amazon_code(client, message):
     if REG_HALF[message.chat.id]:
         code = message.text
         try:
-            client.send_message(message.chat.id, "✅ Procedura completata\nPotresti dover attendere un paio di minuti perché il nuovo canale appaia con /channels")
+            client.send_message(message.chat.id, "✅ Procedura completata\nPotresti dover attendere un paio di minuti perché il nuovo canale appaia con /post")
         except FloodWait as fw:
             logging.error(
                     f"Error in chat with {name} [{message.from_user.id}] -> FloodWait! Sleeping for {fw.x} seconds...")
