@@ -69,7 +69,7 @@ def on_start(client, message):
         time.sleep(fw.x)
 
 
-@Client.on_message(Filters.command("gopremium" & Filters.private & ~BANNED_USERS)
+@Client.on_message(Filters.command("gopremium") & Filters.private & ~BANNED_USERS)
 def go_premium(client, message):
     if message.from_user.first_name:
         name = message.from_user.first_name

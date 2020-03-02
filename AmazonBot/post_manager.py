@@ -22,6 +22,8 @@ def send_post(client, choices, channel, scheduled, amzn_code):
         link = product["link"]
         real_link = f"{link}?tag={amzn_code}"
         stars = product["stars"]
+        revs = product["reviews"]
+        seller = product["seller"]
         message = ""
         buttons = InlineKeyboardMarkup([[InlineKeyboardButton("💰 Acquista ora", url=real_link)]])
         if choices['pic'] == "✅":
@@ -30,7 +32,7 @@ def send_post(client, choices, channel, scheduled, amzn_code):
             message += "🔥 **Nuova Offerta** 🔥\n\n"
         message += f"✔️ __{name}__"
         if choices['text'] == "✅":
-            message += f"\n\n◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤\n\n❌ ~~{old_price}{currency}~~ in offerta a `{new_price}{currency}` ✅\n\n🤑 Risparmio del {percentage} 🤑\n\n⭐️ {stars} stelle ⭐"
+            message += f"\n\n◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤\n\n❌ ~~{old_price}{currency}~~ in offerta a `{new_price}{currency}` ✅\n\n🤑 Risparmio del {percentage} 🤑\n\n⭐️ {stars} stelle ⭐\n\n📣 Recensioni: {revs}\n\n📦 Venduto da: {seller}"
         message += f"\n\n🌐 <a href='{real_link}'>Link prodotto</a>\n\n◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤"
         try:
             client.send_message(channel, message, reply_markup=buttons)
