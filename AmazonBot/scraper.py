@@ -36,24 +36,30 @@ def search_products(which: str):
     return offers
 
 
-def scrape_deals():
+def scrape_random_deal():
     """Scrapes the latest deals from the API and returns them"""
 
-    logging.debug("Contacting API for offers...")
-    request = requests.get(API_OFFERS_URL, headers=HEADERS)
-    if request.status_code != 200:
-        logging.error("Uh oh! Could not reach API")
-        exit(request.status_code)
-    logging.debug(f"Loading JSON...")
-    try:
-        data = json.loads(request.content)
-    except json.JSONDecodeError as e:
-        logging.error(f"Error while loading json response from API! -> {e}")
-        return None
-    logging.info(f"Scraped {len(data)} offers")
-    if not data:
-        logging.debug("No offers found :(")
-        return deque()
+    logging.debug("Contacting API for deals...")
+    while True:
+        request = requests.get(API_OFFERS_URL, headers=HEADERS)
+        if request.status_code != 200:
+            logging.error("Uh oh! Could not reach API")
+            exit(request.status_code)
+        logging.debug(f"Loading JSON...")
+        try:
+            data = json.loads(request.content)
+        except json.JSONDecodeError as e:
+            logging.error(f"Error while loading json response from API! -> {e}")
+            return None
+        logging.info(f"Scraped a random deal")
+        if not data:
+            logging.debug("No offers found :(")
+            return deque()
+        elif data.get("ok", False):
+            continue
+        else:
+            break
     return data
+
 
 
