@@ -12,7 +12,7 @@ from collections import defaultdict
 from ..post_manager import send_post
 
 
-DOING = defaultdict(lambda: ([0, 0 , 0]))
+DOING = defaultdict(lambda: ([None, None, None]))
 choices = defaultdict(lambda: defaultdict(list))
 IDS = defaultdict(lambda: defaultdict(int))
 
@@ -147,8 +147,9 @@ def parse_date(client, message):
     else:
         name = "Anonimo"
     for key, (channel, action, date) in DOING.copy().items():
-        if time.time() - date >= 120:
-            del DOING[key]
+        if date:
+            if time.time() - date >= 120:
+                del DOING[key]
     date = dateparser.parse(message.text, languages=['it'], region='IT')
     if not date and DOING[message.from_user.id]:
         try:
