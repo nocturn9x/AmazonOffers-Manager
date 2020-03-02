@@ -12,7 +12,7 @@ from collections import defaultdict
 from ..post_manager import send_post
 
 
-DOING = defaultdict(lambda: ([None, None, None]))
+DOING = defaultdict(lambda: ([0, 0 , 0]))
 choices = defaultdict(lambda: defaultdict(list))
 IDS = defaultdict(lambda: defaultdict(int))
 
@@ -26,7 +26,8 @@ def flt_schedule(flt, message):
     if not DOING[message.from_user.id][0]:
         return False
     else:
-        return DOING[message.from_user.id][1] == "SCHEDULE"
+        return DOING[message.from_user.id][1] == "SCHEDULE" and isinstance(DOING[message.from_user.id][-1], int)
+
 
 Filters.UserScheduling = Filters.create(flt_schedule)
 
