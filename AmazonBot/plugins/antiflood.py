@@ -13,10 +13,12 @@ BANNED_USERS = Filters.chat()
 @Client.on_message(Filters.private, group=-1)
 def anti_flood(client, message):
     if isinstance(messages[message.from_user.id], tuple):
-        if time.time() - messages[message.from_user.id][1] >= BAN_TIME:
+        if (int(time.time()) - messages[message.from_user.id][1] >= BAN_TIME:
+            logging.warning(f"{message.from_user.id} has waited at least {BAN_TIME} seconds and can now text again")
             BANNED_USERS.remove(message.from_user.id)
             messages[message.from_user.id] = []
     elif len(messages[message.from_user.id]) == MAX_MESS_THRESHOLD:
+        logging.warning(f"MAX_MESS_THRESHOLD ({MAX_MESS_THRESHOLD}) Reached for {message.from_user.id}")
         timestamps = messages.pop(message.from_user.id)
         subtractions = []
         for index, timestamp in enumerate(timestamps):
@@ -25,9 +27,9 @@ def anti_flood(client, message):
             else:
                 subtractions.append(timestamps[index - 1] - timestamp)
         if all(i <= 0.5 for i in subtractions):
-            logging.debug(f"Flood detected from {message.from_user.id}")
+            logging.warning(f"Flood detected from {message.from_user.id}")
             BANNED_USERS.add(message.from_user.id)
-            messages[message.from_user.id] = 'remove_at', time.time()
+            messages[message.from_user.id] = 'added_on', int(time.time)
         else:
             messages[message.from_user.id] = []
     else:
