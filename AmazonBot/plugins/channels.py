@@ -26,7 +26,7 @@ def flt_schedule(flt, message):
     if not DOING[message.from_user.id][0]:
         return False
     else:
-        if len(DOING) >= 3:
+        if len(DOING[message.from_user.id]) >= 3:
             return DOING[message.from_user.id][1] == "SCHEDULE"
 
 Filters.UserScheduling = Filters.create(flt_schedule)
@@ -126,6 +126,7 @@ def schedule_message(client, query):
             logging.error(f"Error in chat with {name} [{query.from_user.id}] -> {exc}")
     else:
         try:
+            DOING[query.from_user.id].append("SEND")
             query.edit_message_text("✅ Fatto! Il post sarà inviato a breve nel canale selezionato")
             send_post(client, choices[query.from_user.id], DOING[query.from_user.id][0], False, IDS[DOING[query.from_user.id][0]])
             del DOING[message.from_user.id]
@@ -154,7 +155,7 @@ def parse_date(client, message):
     except ValueError:
         pass
     date = dateparser.parse(message.text, languages=['it'], region='IT')
-    if not date and DOING[message.from_user.id]:
+    if not date:
         try:
             client.send_message(message.from_user.id, "❌ Errore: Non hai fornito una data valida o la tua sessione é scaduta, riprova!")
         except FloodWait as fw:

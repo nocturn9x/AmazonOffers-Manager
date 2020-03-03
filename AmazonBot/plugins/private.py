@@ -80,7 +80,7 @@ def go_premium(client, message):
     user_id = message.from_user.id
     buttons = InlineKeyboardMarkup([[InlineKeyboardButton(url="telegram.me/AmazonOffersSupport", text="🔥 Contattaci")]])
     try:
-        client.send_message(message.chat.id, f"🌈 Per diventare premium contatta l'assistenza tramite il bottone qui sotto\n\nUna volta premium potrai:\n- Programmare un numero illimitato di post\n- Creare bottoni personalizzati (Coming Soon)\n- Modificare il testo dei post (Coming Soon)")
+        client.send_message(message.chat.id, f"🌈 Per diventare premium contatta l'assistenza tramite il bottone qui sotto\n\nUna volta premium potrai:\n- Programmare un numero illimitato di post\n- Creare bottoni personalizzati (Coming Soon)\n- Modificare il testo dei post (Coming Soon)", reply_markup=buttons)
     except FloodWait as fw:
         logging.error(
             f"Error in chat with {name} [{message.from_user.id}] -> FloodWait! Sleeping {fw.x} seconds...")
