@@ -26,7 +26,8 @@ def anti_flood(client, message):
                 subtractions.append(timestamps[index + 1] - timestamp)
             else:
                 subtractions.append(timestamp - timestamps[index - 1])
-        if all(i <= 0.5 for i in subtractions):
+        print(subtractions)
+        if all(i <= 1 for i in subtractions):
             logging.warning(f"Flood detected from {message.from_user.id}")
             BANNED_USERS.add(message.from_user.id)
             messages[message.from_user.id] = 'added_on', int(time.time())
