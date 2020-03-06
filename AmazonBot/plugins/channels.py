@@ -75,7 +75,7 @@ def on_post_complete(client, query):
         name = message.from_user.username
     else:
         name = "Anonimo"
-    buttons = [[InlineKeyboardButton("✅ Conferma", callback_data='confirm_choices'), []]
+    buttons = [[InlineKeyboardButton("✅ Conferma", callback_data='confirm_choices'), ]]
     for button in query.message.reply_markup.inline_keyboard:
         button = button[0]
         if button.callback_data.startswith("schedule"):
@@ -98,7 +98,7 @@ def on_post_complete(client, query):
     channel_id, channel_name = IDS[query.from_user.id]
     data = f"{channel_id}_{b64enc(channel_name.encode()).decode()}_{sub}"
     buttons[0].append(InlineKeyboardButton("⬅️ Indietro", callback_data=data))
-    buttons[1].append(InlineKeyboardButton("❌ Annulla", callback_data='back_start'))
+    buttons[0].append(InlineKeyboardButton("❌ Annulla", callback_data='back_start'))
     buttons = InlineKeyboardMarkup(buttons)
     try:
         query.edit_message_text(f"**AmazonOffers Manager - Conferma Post**\n\nRivedi le informazioni sul post e premi conferma, altrimenti premi indietro\n\n📸 Foto: {choices[query.from_user.id]['pic']}\n✍ Didascalia: {choices[query.from_user.id]['text']}\n⏰ Programma: {choices[query.from_user.id]['schedule']}", reply_markup=buttons)

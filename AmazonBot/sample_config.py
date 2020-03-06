@@ -23,7 +23,7 @@ BAN_TIME = 60
 
 # DANGER ZONE - DO NOT CHANGE ANYTHING BELOW THIS LINE - SHARED VARIABLES
 
-DB_PATH = os.path.join(os.getcwd(), "/database/users.db")
+DB_PATH = os.path.join(os.getcwd(), "AmazonBot/database/users.db")
 CREATE_QUERY = """CREATE TABLE channels (channel INTEGER NOT NULL PRIMARY KEY,
                                         channel_name TEXT NOT NULL,
                                         admins TEXT NULL,
