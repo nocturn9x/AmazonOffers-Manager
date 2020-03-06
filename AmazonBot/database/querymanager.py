@@ -11,11 +11,10 @@ def register_channel(channel_id, admins, subscription, affiliate_code, channel_n
     try:
         logging.info(f"Inserting: {channel_id}, {channel_name}, {admins}, {subscription}, {affiliate_code}")
         cursor.execute("INSERT INTO channels(channel, channel_name, admins, subscription, amzn_code) VALUES(?, ?, ?, ?, ?);", (channel_id, channel_name, admins, subscription, affiliate_code))
-        DB.commit()
     except sqlite3.IntegrityError:
         logging.info("Channel already exists, replacing old values...")
         try:
-            cursor.execute("UPDATE channels SET channel_name = ?, admins = ?, amzn_code = ?", (channel_name, admins, affiliate_code))
+            cursor.execute("UPDATE channels SET channel_name = ?, admins = ?, amzn_code = ? WHERE channel = ?", (channel_name, admins, affiliate_code, channel_id))
         except sqlite3.Error as err:
             logging.error(f"Error while inserting! {err}")
         else:
@@ -24,6 +23,7 @@ def register_channel(channel_id, admins, subscription, affiliate_code, channel_n
         logging.error(f"Error while inserting! {err}")
     else:
         logging.info("Done!")
+    DB.commit()
     cursor.close()
 
 

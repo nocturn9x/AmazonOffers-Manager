@@ -57,7 +57,7 @@ def make_post(_, query):
     buttons = InlineKeyboardMarkup(buttons)
     try:
         query.edit_message_text(f"**AmazonOffers Manager - Crea Post**\n\nQui puoi rivedere e programmare un post nel canale\n\n📣 Canale: {channel_name}\n🆔 ID: `{channel_id}`\n⭐️ Pro: {pro}\n\n🗺 **Legenda** 🗺\n\nFoto: Se impostato, allega la foto del prodotto al post\n\nDidascalia: Se impostato, allega una breve descrizione del prodotto al post\n\nProgramma: Programma l'invio del post, solo per utenti PRO\n\n__Il prodotto oggetto del post sarà casuale, scelto tra le offerte giornaliere disponibili__", reply_markup=buttons)
-        IDS[query.from_user.id] = channel_id
+        IDS[query.from_user.id] = channel_id, channel_name
     except exceptions.bad_request_400.MessageNotModified as exc:
         logging.error(f"Error in chat with {name} [{query.from_user.id}] -> {exc}")
     except FloodWait as fw:
@@ -75,14 +75,16 @@ def on_post_complete(client, query):
         name = message.from_user.username
     else:
         name = "Anonimo"
-    buttons = InlineKeyboardMarkup([[InlineKeyboardButton("✅ Conferma", callback_data='confirm_choices'), InlineKeyboardButton('⬅️ Annulla', callback_data='back_start')]])
+    buttons = [[InlineKeyboardButton("✅ Conferma", callback_data='confirm_choices'), []]
     for button in query.message.reply_markup.inline_keyboard:
         button = button[0]
         if button.callback_data.startswith("schedule"):
             if button.callback_data == "schedule_reset":
                 choices[query.from_user.id]["schedule"] = "✅"
+                sub = "pro"
             else:
                 choices[query.from_user.id]["schedule"] = "❌"
+                sub = "free"
         elif button.callback_data.startswith("pic"):
             if button.callback_data.startswith("pic_true"):
                 choices[query.from_user.id]["pic"] = "❌"
@@ -93,8 +95,13 @@ def on_post_complete(client, query):
                 choices[query.from_user.id]["text"] = "❌"
             else:
                 choices[query.from_user.id]["text"] = "✅"
+    channel_id, channel_name = IDS[query.from_user.id]
+    data = f"{channel_id}_{b64enc(channel_name.encode()).decode()}_{sub}"
+    buttons[0].append(InlineKeyboardButton("⬅️ Indietro", callback_data=data))
+    buttons[1].append(InlineKeyboardButton("❌ Annulla", callback_data='back_start'))
+    buttons = InlineKeyboardMarkup(buttons)
     try:
-        query.edit_message_text(f"**AmazonOffers Manager - Conferma Post**\n\nRivedi le informazioni sul post e premi conferma, altrimenti premi annulla per tornare al menù principale\n\n📸 Foto: {choices[query.from_user.id]['pic']}\n✍ Didascalia: {choices[query.from_user.id]['text']}\n⏰ Programma: {choices[query.from_user.id]['schedule']}", reply_markup=buttons)
+        query.edit_message_text(f"**AmazonOffers Manager - Conferma Post**\n\nRivedi le informazioni sul post e premi conferma, altrimenti premi indietro\n\n📸 Foto: {choices[query.from_user.id]['pic']}\n✍ Didascalia: {choices[query.from_user.id]['text']}\n⏰ Programma: {choices[query.from_user.id]['schedule']}", reply_markup=buttons)
     except exceptions.bad_request_400.MessageNotModified as exc:
         logging.error(f"Error in chat with {name} [{query.from_user.id}] -> {exc}")
     except FloodWait as fw:
@@ -129,7 +136,7 @@ def schedule_message(client, query):
         try:
             DOING[query.from_user.id].append("SEND")
             query.edit_message_text("✅ Fatto! Il post sarà inviato a breve nel canale selezionato")
-            send_post(client, choices[query.from_user.id], DOING[query.from_user.id][0], False, IDS[DOING[query.from_user.id][0]])
+            send_post(client, choices[query.from_user.id], DOING[query.from_user.id][0], False, IDS[DOING[query.from_user.id][0]][0])
             del DOING[message.from_user.id]
         except FloodWait as fw:
             logging.error(
@@ -168,7 +175,7 @@ def parse_date(client, message):
         date = date.strftime("%d/%m/%Y %H:%M:%S %p")
         try:
             client.send_message(message.chat.id, f"✅ Post Programmato!\n\n🕙 Data & Ora: {date}")
-            send_post(client, choices[message.from_user.id], DOING[message.from_user.id][0], int(d_obj.timestamp()), IDS[DOING[message.from_user.id][0]])
+            send_post(client, choices[message.from_user.id], DOING[message.from_user.id][0], int(d_obj.timestamp()), IDS[DOING[message.from_user.id][0]][0])
             del DOING[message.from_user.id]
         except FloodWait as fw:
             logging.error(

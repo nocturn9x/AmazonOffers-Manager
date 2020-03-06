@@ -1,14 +1,13 @@
-from pyrogram import Filters, InlineKeyboardMarkup, InlineKeyboardButton, Client
+from pyrogram import Filters, Client
 import time
 import logging
 from collections import defaultdict
 from ..config import MAX_MESS_THRESHOLD, BAN_TIME
-import time
+
 
 
 messages = defaultdict(list)
-BANNED_USERS = Filters.chat()
-
+BANNED_USERS = Filters.user()
 
 @Client.on_message(Filters.private, group=-1)
 def anti_flood(client, message):
@@ -26,7 +25,7 @@ def anti_flood(client, message):
                 subtractions.append(timestamps[index + 1] - timestamp)
             else:
                 subtractions.append(timestamp - timestamps[index - 1])
-        if all(i <= 0.5 for i in subtractions):
+        if all(i <= 1 for i in subtractions):
             logging.warning(f"Flood detected from {message.from_user.id}")
             BANNED_USERS.add(message.from_user.id)
             messages[message.from_user.id] = 'added_on', int(time.time())
