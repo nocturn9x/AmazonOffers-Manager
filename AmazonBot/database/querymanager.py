@@ -32,7 +32,7 @@ def retrieve_channels(user_id):
     DB = sqlite3.connect(DB_PATH)
     cursor = DB.cursor()
     try:
-        query = cursor.execute("SELECT channel, channel_name, admins, subscription, amzn_code from channels")
+        query = cursor.execute("SELECT * FROM channels")
     except sqlite3.Error as err:
         logging.error(f"Error while retrieving! {err}")
     else:
@@ -41,7 +41,8 @@ def retrieve_channels(user_id):
                 channels.append((channel_id, name, sub, code))
     return channels
 
-def add_admin(user_id, super: bool = False)
+
+def add_admin(user_id, super: bool = False):
     DB = sqlite3.connect(DB_PATH)
     cursor = DB.cursor()
     try:
@@ -51,11 +52,12 @@ def add_admin(user_id, super: bool = False)
     else:
         DB.commit()
 
+
 def remove_admin(user_id):
     DB = sqlite3.connect(DB_PATH)
     cursor = DB.cursor()
     try:
-        exists = cursor.execute("SELECT id from admins WHERE id = ?", (user_id))
+        exists = cursor.execute("SELECT * FROM admins WHERE id = ?", (user_id, ))
     except sqlite3.Error as err:
         logging.error(f"Error while removing admin -> {err}")
     else:
@@ -70,3 +72,37 @@ def remove_admin(user_id):
         else:
             return False
 
+
+def add_pro(id):
+    DB = sqlite3.connect(DB_PATH)
+    cursor = DB.cursor()
+    try:
+        cursor.execute("UPDATE channels SET subscription = 'pro'  WHERE channel = ?", (id, ))
+    except sqlite3.Error as err:
+        logging.error(f"Error while updating subscription for {id} -> {err}")
+    else:
+        DB.commit()
+        return True
+
+
+def remove_pro(id):
+    DB = sqlite3.connect(DB_PATH)
+    cursor = DB.cursor()
+    try:
+        cursor.execute("UPDATE channels SET subscription = 'free' WHERE channel = ?", (id, ))
+    except sqlite3.Error as err:
+        logging.error(f"Error while updating subscription for {id} -> {err}")
+    else:
+        DB.commit()
+        return True
+
+
+def get_admins():
+    DB = sqlite3.connect(DB_PATH)
+    cursor = DB.cursor()
+    try:
+        query = cursor.execute("SELECT id from ADMINS")
+    except sqlite3.Error as err:
+        logging.error(f"Error while retrieving admins! -> {err}")
+    else:
+        return query.fetchall()

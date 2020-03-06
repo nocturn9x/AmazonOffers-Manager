@@ -45,7 +45,6 @@ def make_post(_, query):
     channel_id, channel_name, sub = query.data.split("_")
     DOING[query.from_user.id] = [int(channel_id), 0, 0]
     pro = 'Sì' if sub == 'pro' else 'No'
-    pro = 'Sì'
     channel_name = b64dec(channel_name.encode("utf-8")).decode()
     data = (('📸 Foto: ❌', 'pic_true'), ('✍ Didascalia: ❌', 'text_true',), ('⏰ Programma: ❌', 'schedule_true' if pro == 'Sì'  else 'schedule_false'), ('✅ Procedi', 'post_complete'), ('⬅️ Indietro', 'back_start'))
     buttons = []

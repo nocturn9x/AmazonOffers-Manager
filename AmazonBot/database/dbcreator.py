@@ -28,7 +28,7 @@ def create_database(path: str):
     if new:
         cursor = DB.cursor()
         try:
-            cursor.execute(CREATE_QUERY)
+            cursor.executescript(CREATE_QUERY)
             DB.commit()
             cursor.close()
         except sqlite3.OperationalError as e:
