@@ -40,3 +40,33 @@ def retrieve_channels(user_id):
             if user_id in json.loads(json_data)["admins"]:
                 channels.append((channel_id, name, sub, code))
     return channels
+
+def add_admin(user_id, super: bool = False)
+    DB = sqlite3.connect(DB_PATH)
+    cursor = DB.cursor()
+    try:
+        cursor.execute("INSERT INTO admins(id, super_user) VALUES(?, ?)", (user_id, 0 if not super else 1))
+    except sqlite3.Error as err:
+        logging.error(f"Error while inserting admin -> {err}")
+    else:
+        DB.commit()
+
+def remove_admin(user_id):
+    DB = sqlite3.connect(DB_PATH)
+    cursor = DB.cursor()
+    try:
+        exists = cursor.execute("SELECT id from admins WHERE id = ?", (user_id))
+    except sqlite3.Error as err:
+        logging.error(f"Error while removing admin -> {err}")
+    else:
+        if exists.fetchall():
+            try:
+                cursor.execute("DELETE FROM admins WHERE id = ?", (user_id, ))
+            except sqlite3.Error as err:
+                logging.error(f"Error while removing admin -> {err}")
+            else:
+                DB.commit()
+                return True
+        else:
+            return False
+
