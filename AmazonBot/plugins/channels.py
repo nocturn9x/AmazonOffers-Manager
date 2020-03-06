@@ -23,11 +23,12 @@ def query_regex(data):
         data=data)
 
 def flt_schedule(flt, message):
-    if not DOING[message.from_user.id][0]:
-        return False
-    else:
-        if len(DOING[message.from_user.id]) >= 3:
-            return DOING[message.from_user.id][1] == "SCHEDULE"
+    if message.from_user:
+        if not DOING[message.from_user.id][0]:
+            return False
+        else:
+            if len(DOING[message.from_user.id]) >= 3:
+                return DOING[message.from_user.id][1] == "SCHEDULE"
 
 Filters.UserScheduling = Filters.create(flt_schedule)
 

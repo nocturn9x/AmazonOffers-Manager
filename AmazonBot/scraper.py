@@ -55,9 +55,7 @@ def scrape_random_deal():
         if not data:
             logging.debug("No offers found :(")
             return deque()
-        elif data.get("ok", False):
-            continue
-        else:
+        elif "ok" not in data:
             break
     return data
 
