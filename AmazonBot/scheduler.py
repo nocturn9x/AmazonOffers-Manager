@@ -14,4 +14,3 @@ def scheduler_thread():
                 logging.debug("Found message to schedule, sending...")
                 args[3] = False
                 send_post(*args)
-                del args

@@ -11,6 +11,7 @@ SCHEDULED = list()
 
 
 def send_post(client, choices, channel, scheduled, amzn_code):
+    print(amzn_code)
     product = scrape_random_deal()
     if product and not scheduled:
         img = product["img"]
@@ -21,6 +22,8 @@ def send_post(client, choices, channel, scheduled, amzn_code):
         percentage = product["save"]
         link = product["link"]
         real_link = f"{link}?tag={amzn_code}"
+        print(real_link)
+        print(amzn_code)
         stars = product["stars"]
         revs = product["reviews"]
         seller = product["seller"]

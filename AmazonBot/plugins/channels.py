@@ -135,7 +135,7 @@ def schedule_message(client, query):
         try:
             DOING[query.from_user.id].append("SEND")
             query.edit_message_text("✅ Fatto! Il post sarà inviato a breve nel canale selezionato")
-            send_post(client, choices[query.from_user.id], DOING[query.from_user.id][0], False, IDS[DOING[query.from_user.id][0]][0])
+            send_post(client, choices[query.from_user.id], DOING[query.from_user.id][0], False, IDS[DOING[query.from_user.id][0]])
             del DOING[message.from_user.id]
         except FloodWait as fw:
             logging.error(
@@ -174,7 +174,7 @@ def parse_date(client, message):
         date = date.strftime("%d/%m/%Y %H:%M:%S %p")
         try:
             client.send_message(message.chat.id, f"✅ Post Programmato!\n\n🕙 Data & Ora: {date}")
-            send_post(client, choices[message.from_user.id], DOING[message.from_user.id][0], int(d_obj.timestamp()), IDS[DOING[message.from_user.id][0]][0])
+            send_post(client, choices[message.from_user.id], DOING[message.from_user.id][0], int(d_obj.timestamp()), IDS[DOING[message.from_user.id][0]])
             del DOING[message.from_user.id]
         except FloodWait as fw:
             logging.error(
