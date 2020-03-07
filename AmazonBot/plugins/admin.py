@@ -55,13 +55,13 @@ def unmake_pro(client, message):
     admins = []
     for admin in get_admins():
         admins.append(admin[0])
-    if message.from_user.id in admins or message.from_user.id in ADMINS:
+    if message.from_user.id in admins + ADMINS:
         if len(message.command) == 2:
             if len(message.command) >= 2:
                 if message.command[1][1:].isdigit():
                     user_id = int(message.command[1])
                     if user_id < 0:
-                        add_pro(user_id)
+                        remove_pro(user_id)
                         try:
                             client.send_message(message.chat.id, f"✅ Fatto! Ora il canale con ID `{user_id}` non é più pro!")
                         except FloodWait as err:
