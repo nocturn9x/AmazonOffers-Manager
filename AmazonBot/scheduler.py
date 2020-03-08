@@ -12,5 +12,4 @@ def scheduler_thread():
         for index, args in enumerate(SCHEDULED):
             if math.isclose(args[3], time.time(), abs_tol=3):
                 logging.debug("Found message to schedule, sending...")
-                args[3] = False
                 send_post(*args)

@@ -10,6 +10,8 @@ from base64 import b64decode as b64dec
 import dateparser
 from collections import defaultdict
 from ..post_manager import send_post
+from ..database import querymanager
+import json
 
 
 DOING = defaultdict(lambda: ([None, None, None]))
@@ -132,10 +134,20 @@ def schedule_message(client, query):
         except exceptions.bad_request_400.MessageNotModified as exc:
             logging.error(f"Error in chat with {name} [{query.from_user.id}] -> {exc}")
     else:
+        template = querymanager.get_post(DOING[query.from_user.id][0])
+        keyboard = querymanager.get_buttons(DOING[query.from_user.id][0])
+        if template[0][0] == 'default':
+            template = False
+        else:
+            template = template[0][0]
+        if keyboard[0][0] == 'default':
+            keyboard = False
+        else:
+            keyboard = json.loads(keyboard[0][0])
         try:
             DOING[query.from_user.id].append("SEND")
             query.edit_message_text("✅ Fatto! Il post sarà inviato a breve nel canale selezionato")
-            send_post(client, choices[query.from_user.id], DOING[query.from_user.id][0], False, IDS[DOING[query.from_user.id][0]])
+            send_post(client, choices[query.from_user.id], DOING[query.from_user.id][0], False, IDS[DOING[query.from_user.id][0]], template, keyboard)
             del DOING[message.from_user.id]
         except FloodWait as fw:
             logging.error(
@@ -172,9 +184,19 @@ def parse_date(client, message):
     else:
         d_obj = date
         date = date.strftime("%d/%m/%Y %H:%M:%S %p")
+        template = querymanager.get_post(DOING[query.from_user.id][0])
+        keyboard = querymanager.get_buttons(DOING[query.from_user.id][0]) 
+        if template[0][0] == 'default':
+            template = False
+        else:
+            template = template[0][0]
+        if keyboard[0][0] == 'default':
+            keyboard = False
+        else:
+            keyboard = json.loads(keyboard[0][0])
         try:
             client.send_message(message.chat.id, f"✅ Post Programmato!\n\n🕙 Data & Ora: {date}")
-            send_post(client, choices[message.from_user.id], DOING[message.from_user.id][0], int(d_obj.timestamp()), IDS[DOING[message.from_user.id][0]])
+            send_post(client, choices[message.from_user.id], DOING[message.from_user.id][0], int(d_obj.timestamp()), IDS[DOING[message.from_user.id][0]], template, keyboard)
             del DOING[message.from_user.id]
         except FloodWait as fw:
             logging.error(
@@ -406,6 +428,7 @@ def on_channels(client, message):
             if len(data) > 64:
                 data = f"{channel_id}_{b64enc(channel_name[0:10].encode()).decode()}_{sub}"
             buttons.append([InlineKeyboardButton(text=channel_name, callback_data=data)])
+            buttons.append([InlineKeyboardButton("⬅️ Indietro", callback_data="back_start")])
         try:
             client.send_message(message.chat.id, response, reply_markup=InlineKeyboardMarkup(buttons))
         except FloodWait as fw:

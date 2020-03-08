@@ -36,7 +36,7 @@ def retrieve_channels(user_id):
     except sqlite3.Error as err:
         logging.error(f"Error while retrieving! {err}")
     else:
-        for channel_id, name, json_data, sub, code in query.fetchall():
+        for channel_id, name, json_data, sub, code, _, _ in query.fetchall():
             if user_id in json.loads(json_data)["admins"]:
                 channels.append((channel_id, name, sub, code))
     return channels
@@ -101,8 +101,48 @@ def get_admins():
     DB = sqlite3.connect(DB_PATH)
     cursor = DB.cursor()
     try:
-        query = cursor.execute("SELECT id from ADMINS")
+        query = cursor.execute("SELECT * from ADMINS")
     except sqlite3.Error as err:
         logging.error(f"Error while retrieving admins! -> {err}")
     else:
         return query.fetchall()
+
+
+def save_post(post, channel):
+    DB = sqlite3.connect(DB_PATH)
+    cursor = DB.cursor()
+    try:
+        query = cursor.execute("UPDATE channels SET post_template = ? WHERE channel = ?", (post, channel))
+    except sqlite3.Error as err:
+        logging.error(f"Error while updating post template for {channel}! -> {err}")
+    DB.commit()
+
+
+def save_buttons(buttons, channel):
+    DB = sqlite3.connect(DB_PATH)
+    cursor = DB.cursor()
+    try:
+        query = cursor.execute("UPDATE channels SET buttons_template = ? WHERE channel = ?", (buttons, channel))
+    except sqlite3.Error as err:
+        logging.error(f"Error while retrieving buttons template for {channel}! -> {err}")
+    DB.commit()
+
+
+def get_buttons(channel):
+    DB = sqlite3.connect(DB_PATH)
+    cursor = DB.cursor()
+    try:
+        query = cursor.execute("SELECT buttons_template FROM channels WHERE channel = ?", (channel, ))
+    except sqlite3.Error as err:
+        logging.error(f"Error while retrieving buttons template template for {channel}! -> {err}")
+    return query.fetchall()
+
+
+def get_post(channel):
+    DB = sqlite3.connect(DB_PATH)
+    cursor = DB.cursor()
+    try:
+        query = cursor.execute("SELECT post_template FROM channels WHERE channel = ?", (channel, ))
+    except sqlite3.Error as err:
+        logging.error(f"Error while retrieving post template template for {channel}! -> {err}")
+    return query.fetchall()
