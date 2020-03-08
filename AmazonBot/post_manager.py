@@ -15,6 +15,7 @@ def send_post(client, choices, channel, scheduled, amzn_code, template=None, but
     product = scrape_random_deal()
     if product and not scheduled:
         img = product["img"]
+        currency = "€"
         name = product["name"]
         old_price = product["oldPrice"]
         new_price = product["newPrice"]

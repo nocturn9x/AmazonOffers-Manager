@@ -186,7 +186,7 @@ def change_buttons_handler(client, message):
             logging.error(
                 f"Error in chat with {name} [{message.from_user.id}] -> FloodWait! Sleeping for {fw.x} seconds...")
             time.sleep(fw.x)
-            del DOING[message.from_user.id]
+        del DOING[message.from_user.id]
     else:
         try:
             client.send_message(message.from_user.id, "❌ Errore: La tastiera fornita non é valida, riprova")
