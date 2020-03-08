@@ -103,7 +103,7 @@ def change_template_menu(_, query):
         name = "Anonimo"
     buttons = InlineKeyboardMarkup([[InlineKeyboardButton("❌ Annulla", callback_data="back_start")]])
     try:
-        query.edit_message_text("**AmazonOffers Manager - Impostazioni**\n\nQui puoi modificare l'aspetto dei post sul canale, invia ora il nuovo messaggio che vuoi impostare.\n**Puoi usare i seguenti placeholder**:\n\n`{oldPrice}`: Il prezzo del prodotto prima dello sconto\n\n`{newPrice}`: Il prezzo scontato\n\n`{name}`: Il nome del prodotto\n\n`{save}`: La % di sconto applicata\n\n`{reviewsNum}`: Il numero di recensioni\n\n`{seller}`: Il nome del venditore\n\n`{realLink}`: Il link al prodotto (contiene il tuo ID affiliato)\n\n`{img}`: Link all'immagine del prodotto\n**N.B.** Consigliamo di inserire img all'interno di un tag HTML come in questo esempio\n\n`<a href={link}>EMOJI</>`", reply_markup=buttons, parse_mode="md")
+        query.edit_message_text("**AmazonOffers Manager - Impostazioni**\n\nQui puoi modificare l'aspetto dei post sul canale, invia ora il nuovo messaggio che vuoi impostare.\n**Puoi usare i seguenti placeholder**:\n\n`{oldPrice}`: Il prezzo del prodotto prima dello sconto\n\n`{newPrice}`: Il prezzo scontato\n\n`{name}`: Il nome del prodotto\n\n`{save}`: La % di sconto applicata\n\n`{reviewsNum}`: Il numero di recensioni\n\n`{seller}`: Il nome del venditore\n\n`{realLink}`: Il link al prodotto (contiene il tuo ID affiliato)\n\n`{img}`: Link all'immagine del prodotto\n\n`{starsNum}`: Il numero di stelle di un prodotto (su 5)\n**N.B.** Consigliamo di inserire img all'interno di un tag HTML come in questo esempio\n\n`<a href={link}>EMOJI</>`", reply_markup=buttons, parse_mode="md")
         DOING[query.from_user.id] = ["SET_POST", int(time.time()), channel_id]
     except exceptions.bad_request_400.MessageNotModified as exc:
         logging.error(f"Error in chat with {name} [{query.from_user.id}] -> {exc}")
@@ -169,6 +169,7 @@ def change_buttons_handler(client, message):
     keyboard_data = {}
     raw_data = message.text.splitlines()
     for line in raw_data:
+        print(line)
         if len(line.split("-")) == 2:
             name, url = line.split("-")
             if not re.match(URI_REGEX, url.strip()):
@@ -186,7 +187,7 @@ def change_buttons_handler(client, message):
             logging.error(
                 f"Error in chat with {name} [{message.from_user.id}] -> FloodWait! Sleeping for {fw.x} seconds...")
             time.sleep(fw.x)
-            del DOING[message.from_user.id]
+        del DOING[message.from_user.id]
     else:
         try:
             client.send_message(message.from_user.id, "❌ Errore: La tastiera fornita non é valida, riprova")
