@@ -29,10 +29,10 @@ def send_post(client, choices, channel, scheduled, amzn_code, template=None, but
             buttons = InlineKeyboardMarkup([[InlineKeyboardButton("💰 Acquista ora", url=real_link)]])
         else:
             buttons = []
-            for name, url in buttons_template.items():
+            for bname, url in buttons_template.items():
                 if url == "{prodLink}":
                     url = real_link
-                buttons.append([InlineKeyboardButton(name, url=url)])
+                buttons.append([InlineKeyboardButton(bname, url=url)])
             buttons = InlineKeyboardMarkup(buttons)
         if not template:
             message = ""
@@ -50,7 +50,7 @@ def send_post(client, choices, channel, scheduled, amzn_code, template=None, but
             elif choices['text'] == "✅":
                 message = template.format(oldPrice=old_price, newPrice=new_price, name=name, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, starsNum=stars)
             elif choices['pic'] == "✅":
-                message = template.format(oldPrice=old_price, newPrice=new_price, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, img=img, starsNum=stars)
+                message = template.format(realLink=real_link, img=img, name=name)
             else:
                 message = template.format(oldPrice=old_price, newPrice=new_price, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, starsNum=stars)
         try:

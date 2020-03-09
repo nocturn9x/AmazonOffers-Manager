@@ -169,12 +169,14 @@ def change_buttons_handler(client, message):
     keyboard_data = {}
     raw_data = message.text.splitlines()
     for line in raw_data:
-        print(line)
         if len(line.split("-")) == 2:
             name, url = line.split("-")
             if not re.match(URI_REGEX, url.strip()):
-                valid = False
-                break
+                if url.strip() != "{prodLink}":
+                    valid = False
+                    break
+                else:
+                    keyboard_data[name] = url.strip()
             else:
                 keyboard_data[name] = url.strip()
         else:
