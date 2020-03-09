@@ -14,9 +14,9 @@ import re
 
 DOING = defaultdict(lambda: ([None, None, None]))
 
+
 def flt_setting(which):
-    return Filters.create(
-    lambda flt, message: DOING[message.from_user.id][0] == which,
+    return Filters.create(lambda flt, message: DOING[message.from_user.id][0] == which if message.from_user else None,
     data=which)
 
 Filters.setting = flt_setting
