@@ -43,7 +43,14 @@ def send_post(client, choices, channel, scheduled, amzn_code, template=None, but
                 message += f"\n\n◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤\n\n❌ ~~{old_price}{currency}~~ in offerta a `{new_price}{currency}` ✅\n\n🤑 Risparmio del {percentage} 🤑\n\n⭐️ {stars} stelle ⭐\n\n📣 Recensioni: {revs}\n\n📦 Venduto da: {seller}"
             message += f"\n\n🌐 <a href='{real_link}'>Link prodotto</a>\n\n◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤"
         else:
-            message = template.format(oldPrice=old_price, newPrice=new_price, name=name, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, img=img, starsNum=stars)
+            if choices['pic'] == "✅" and choices['text'] == "✅":
+                message = template.format(oldPrice=old_price, newPrice=new_price, name=name, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, img=img, starsNum=stars)
+            elif choices['text'] == "✅":
+                message = template.format(oldPrice=old_price, newPrice=new_price, name=name, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, starsNum=stars)
+            elif choices['pic'] == "✅":
+                message = template.format(oldPrice=old_price, newPrice=new_price, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, img=img, starsNum=stars)
+            else:
+                message = template.format(oldPrice=old_price, newPrice=new_price, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, starsNum=stars)
         try:
             client.send_message(channel, message, reply_markup=buttons)
         except RPCError as generic_error:
