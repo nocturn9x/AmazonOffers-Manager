@@ -428,7 +428,7 @@ def on_channels(client, message):
             if len(data) > 64:
                 data = f"{channel_id}_{b64enc(channel_name[0:10].encode()).decode()}_{sub}"
             buttons.append([InlineKeyboardButton(text=channel_name, callback_data=data)])
-            buttons.append([InlineKeyboardButton("⬅️ Indietro", callback_data="back_start")])
+        buttons.append([InlineKeyboardButton("⬅️ Indietro", callback_data="back_start")])
         try:
             client.send_message(message.chat.id, response, reply_markup=InlineKeyboardMarkup(buttons))
         except FloodWait as fw:
