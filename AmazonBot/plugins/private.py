@@ -4,7 +4,7 @@ import time
 import logging
 from .antiflood import BANNED_USERS
 from .channels import DOING
-
+from .settings import DOING as SET
 
 def query_filter(data):
     return Filters.create(
@@ -37,6 +37,8 @@ def on_back_button_press(_, query):
     message = query
     if DOING.get(query.from_user.id, None):
         del DOING[query.from_user.id]
+    if SET.get(query.from_user.id, None):
+        del SET[query.from_user.id]
     if message.from_user.first_name:
         name = message.from_user.first_name
     elif message.from_user.username:
