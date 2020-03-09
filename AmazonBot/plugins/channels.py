@@ -184,8 +184,8 @@ def parse_date(client, message):
     else:
         d_obj = date
         date = date.strftime("%d/%m/%Y %H:%M:%S %p")
-        template = querymanager.get_post(DOING[query.from_user.id][0])
-        keyboard = querymanager.get_buttons(DOING[query.from_user.id][0]) 
+        template = querymanager.get_post(DOING[message.from_user.id][0])
+        keyboard = querymanager.get_buttons(DOING[message.from_user.id][0])
         if template[0][0] == 'default':
             template = False
         else:
