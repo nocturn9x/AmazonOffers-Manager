@@ -56,12 +56,12 @@ def send_post(client, choices, channel, scheduled, amzn_code, template=None, but
                     message = template.format(oldPrice=old_price, newPrice=new_price, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, starsNum=stars)
             except (ValueError, KeyError) as e:
                 logging.error(f"Error in the template for {channel}! -> {e}")
-            else:
-                try:
-                    client.send_message(channel, message, reply_markup=buttons)
-                except RPCError as generic_error:
-                    logging.error(f"Error while sending post in {channel} -> {generic_error}")
-            if not product:
-                logging.debug("No deals to send!")
-            elif scheduled:
-                SCHEDULED.append([client, choices, channel, amzn_code, template])
+                return
+        try:
+            client.send_message(channel, message, reply_markup=buttons)
+        except RPCError as generic_error:
+            logging.error(f"Error while sending post in {channel} -> {generic_error}")
+    if not product:
+        logging.debug("No deals to send!")
+    elif scheduled:
+        SCHEDULED.append([client, choices, channel, amzn_code, template])

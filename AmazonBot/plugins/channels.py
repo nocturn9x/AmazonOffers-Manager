@@ -10,7 +10,6 @@ from base64 import b64decode as b64dec
 import dateparser
 from collections import defaultdict
 from ..post_manager import send_post
-from ..database import querymanager
 import json
 
 
