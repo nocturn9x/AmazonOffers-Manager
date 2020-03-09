@@ -125,7 +125,7 @@ def change_keyb_menu(_, query):
         name = "Anonimo"
     buttons = InlineKeyboardMarkup([[InlineKeyboardButton("❌ Annulla", callback_data="back_start")]])
     try:
-        query.edit_message_text("**AmazonOffers Manager - Impostazioni**\n\nQui puoi impostare una tastiera che apparirà sotto ai tuoi post\n\nInvia ora la tastiera che desideri rispettando questo pattern\nTesto del bottone - url\n\nInvia una coppia testo-messaggio per riga", reply_markup=buttons)
+        query.edit_message_text("**AmazonOffers Manager - Impostazioni**\n\nQui puoi impostare una tastiera che apparirà sotto ai tuoi post\n\nInvia ora la tastiera che desideri rispettando questo pattern\nTesto del bottone - url\n\nInvia una coppia testo-messaggio per riga\n\n**P.S.** Per inserire il link del prodotto nel bottone, utilizza il placeholder `{prodLink}` al posto dell'url", reply_markup=buttons)
         DOING[query.from_user.id] = ["SET_KEYB", int(time.time()), channel_id]
     except exceptions.bad_request_400.MessageNotModified as exc:
         logging.error(f"Error in chat with {name} [{query.from_user.id}] -> {exc}")

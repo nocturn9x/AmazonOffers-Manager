@@ -30,6 +30,8 @@ def send_post(client, choices, channel, scheduled, amzn_code, template=None, but
         else:
             buttons = []
             for name, url in buttons_template.items():
+                if url == "{prodLink}":
+                    url = real_link
                 buttons.append([InlineKeyboardButton(name, url=url)])
             buttons = InlineKeyboardMarkup(buttons)
         if not template:
