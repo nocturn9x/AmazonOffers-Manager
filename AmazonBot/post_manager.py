@@ -45,19 +45,23 @@ def send_post(client, choices, channel, scheduled, amzn_code, template=None, but
                 message += f"\n\n◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤\n\n❌ ~~{old_price}{currency}~~ in offerta a `{new_price}{currency}` ✅\n\n🤑 Risparmio del {percentage} 🤑\n\n⭐️ {stars} stelle ⭐\n\n📣 Recensioni: {revs}\n\n📦 Venduto da: {seller}"
             message += f"\n\n🌐 <a href='{real_link}'>Link prodotto</a>\n\n◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤"
         else:
-            if choices['pic'] == "✅" and choices['text'] == "✅":
-                message = template.format(oldPrice=old_price, newPrice=new_price, name=name, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, img=img, starsNum=stars)
-            elif choices['text'] == "✅":
-                message = template.format(oldPrice=old_price, newPrice=new_price, name=name, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, starsNum=stars)
-            elif choices['pic'] == "✅":
-                message = template.format(realLink=real_link, img=img, name=name)
+            try:
+                if choices['pic'] == "✅" and choices['text'] == "✅":
+                    message = template.format(oldPrice=old_price, newPrice=new_price, name=name, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, img=img, starsNum=stars)
+                elif choices['text'] == "✅":
+                    message = template.format(oldPrice=old_price, newPrice=new_price, name=name, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, starsNum=stars)
+                elif choices['pic'] == "✅":
+                    message = template.format(realLink=real_link, img=img, name=name)
+                else:
+                    message = template.format(oldPrice=old_price, newPrice=new_price, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, starsNum=stars)
+            except (ValueError, KeyError) as e:
+                logging.error(f"Error in the template for {channel}! -> {e}")
             else:
-                message = template.format(oldPrice=old_price, newPrice=new_price, save=percentage, reviewsNum=revs, seller=seller, realLink=real_link, starsNum=stars)
-        try:
-            client.send_message(channel, message, reply_markup=buttons)
-        except RPCError as generic_error:
-            logging.error(f"Error while sending post in {channel} -> {generic_error}")
-    if not product:
-        logging.debug("No deals to send!")
-    elif scheduled:
-        SCHEDULED.append([client, choices, channel, amzn_code, template])
+                try:
+                    client.send_message(channel, message, reply_markup=buttons)
+                except RPCError as generic_error:
+                    logging.error(f"Error while sending post in {channel} -> {generic_error}")
+            if not product:
+                logging.debug("No deals to send!")
+            elif scheduled:
+                SCHEDULED.append([client, choices, channel, amzn_code, template])
