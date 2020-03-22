@@ -194,6 +194,7 @@ def parse_date(client, message):
         else:
             keyboard = json.loads(keyboard[0][0])
         try:
+            DOING[message.from_user.id][1] = "DONE"
             client.send_message(message.chat.id, f"✅ Post Programmato!\n\n🕙 Data & Ora: {date}")
             send_post(client, choices[message.from_user.id], DOING[message.from_user.id][0], int(d_obj.timestamp()), IDS[DOING[message.from_user.id][0]], template, keyboard)
             del DOING[message.from_user.id]
